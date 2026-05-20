@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Te Quiero Plantas — Feria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   🌿 TQP FERIA — CONFIGURACIÓN FÁCIL DE EDITAR
+   ============================================================
+   Edita solo esta sección para actualizar contenido.
+   NO toques el código de abajo salvo que seas dev.
+   ============================================================ */
+
+var TQP_CONFIG = {
+
+  /* --- CONTACTO --- */
+  whatsapp: '51962627414',       // Número Yape y WhatsApp (sin + ni espacios)
+  instagram: '@tequieroplantas.pe',
+  bcp_cuenta: '191-XXXXXXX-0-XX', // ← Actualizar con cuenta BCP real
+
+  /* --- LOGO ---
+     1. Sube el archivo del logo a la misma carpeta que este HTML
+     2. Escribe el nombre del archivo aquí (ej: "logo-tqp.png")
+     3. Si no hay logo aún, deja el valor vacío "" y se usará el texto */
+  logo_archivo: 'Logo_TQP_2.png',              // ← Ej: "logo-tqp.png"
+  logo_alto_px: 85,             // Altura del logo en la web (px)
+
+  /* --- COMBOS ---
+     Edita nombre, descripción, precio real, precio tachado y emoji/foto.
+     foto: nombre del archivo de imagen (ej: "combo-esencial.jpg")
+     Si no hay foto, deja "" y se usará el emoji */
+  combos: [
+    {
+      nombre: 'El Esencial',
+      descripcion: ['Maceta artesanal a elegir', 'Planta a elegir', 'Tarjeta de cuidados'],
+      precio: 190,
+      precio_original: 216,
+      badge: 'Más popular',
+      badge_color: '#6b7a3e',
+      emoji: '🌿',
+      foto: '',                  // ← Ej: "combo-esencial.jpg"
+      foto_detalle: 'Maceta artesanal + planta a elegir + tarjeta de cuidados'
+    },
+    {
+      nombre: 'El Doble',
+      descripcion: ['2 macetas a elegir', '2 plantas a elegir', 'Packaging premium'],
+      precio: 320,
+      precio_original: 380,
+      badge: '',
+      badge_color: '#6b7a3e',
+      emoji: '🌱',
+      foto: '',
+      foto_detalle: '2 macetas + 2 plantas + packaging premium'
+    },
+    {
+      nombre: 'El Trío',
+      descripcion: ['3 macetas a elegir', '3 plantas a elegir', 'Packaging + mensaje'],
+      precio: 450,
+      precio_original: 550,
+      badge: 'Premium',
+      badge_color: '#3e4a22',
+      emoji: '🪴',
+      foto: '',
+      foto_detalle: '3 macetas + 3 plantas + packaging + mensaje personalizado'
+    },
+    {
+      nombre: 'Día Especial',
+      descripcion: ['Maceta premium', 'Planta rara', 'Packaging + tarjeta + mensaje'],
+      precio: 580,
+      precio_original: 680,
+      badge: '',
+      badge_color: '#6b7a3e',
+      emoji: '✨',
+      foto: '',
+      foto_detalle: 'Maceta premium + planta rara + packaging completo'
+    }
+  ],
+
+  /* --- CATÁLOGO ---
+     Mismo sistema: foto o emoji.
+     categoria: 'maceta' o 'planta' (para agrupar) */
+  catalogo: [
+    { nombre: 'Adriano',  categoria: 'maceta', precio: 63,  descripcion: 'Rostro minimalista',  emoji: '🌿', foto: '', foto_detalle: 'Cerámica artesanal · Rostro minimalista · 100% peruana' },
+    { nombre: 'Angélica', categoria: 'maceta', precio: 93,  descripcion: 'Con detalles únicos', emoji: '🪴', foto: '', foto_detalle: 'Cerámica artesanal · Con detalles · 100% peruana' },
+    { nombre: 'Brianna',  categoria: 'maceta', precio: 93,  descripcion: 'Acabado gold',         emoji: '✨', foto: '', foto_detalle: 'Cerámica artesanal · Acabado gold · Edición limitada' },
+    { nombre: 'Monstera', categoria: 'planta', precio: 45,  descripcion: 'Fácil de cuidar',     emoji: '🌱', foto: '', foto_detalle: 'Fácil de cuidar · Ideal para interiores · Crece rápido' },
+    { nombre: 'Pothos',   categoria: 'planta', precio: 35,  descripcion: 'Muy resistente',       emoji: '🌿', foto: '', foto_detalle: 'Muy resistente · Ideal para principiantes · Purifica el aire' },
+    { nombre: 'Cactus',   categoria: 'planta', precio: 30,  descripcion: 'Sin mantenimiento',    emoji: '🌵', foto: '', foto_detalle: 'Sin mantenimiento · Perfecto para regalar' }
+  ],
+
+  /* --- DISTRITOS Y TARIFAS DE DELIVERY --- */
+  distritos: {
+    'Ate Vitarte': 19, 'Barranco': 15, 'Breña': 13, 'Callao': 17, 'Campoy': 19,
+    'Carabayllo': 29, 'Centro de Lima': 14, 'Chorrillos': 18, 'Comas': 19,
+    'El Agustino': 23, 'Independencia': 19, 'Jesús María': 12, 'La Molina': 19,
+    'La Victoria': 14, 'Lince': 13, 'Los Olivos': 17, 'Lurín': 29, 'Magdalena': 10,
+    'Miraflores': 14, 'Pueblo Libre': 12, 'Puente Piedra': 29, 'Rímac': 16,
+    'San Juan de Lurigancho': 23, 'San Martín de Porres': 17, 'Salamanca': 15,
+    'San Borja': 15, 'San Isidro': 13, 'San Luis': 15, 'San Miguel': 10,
+    'Santa Anita': 17, 'San Juan de Miraflores': 19, 'Surco': 17, 'Surquillo': 15,
+    'Villa María del Triunfo': 29, 'Ventanilla': 29, 'Villa El Salvador': 29
+  },
+
+  /* --- CUPÓN DE DESCUENTO ---
+     El código se genera como prefijo + últimos 4 dígitos del WhatsApp del cliente */
+  cupon_prefijo: 'TQP',
+  cupon_descuento_pct: 15,      // % de descuento del cupón para próxima compra
+  cupon_vigencia_dias: 30,
+
+  /* --- DESCUENTO POR REGISTRO ---
+     % que se aplica cuando el cliente se registra en la feria */
+  descuento_registro_pct: 10,
+
+  /* --- HORARIOS DE ENTREGA --- */
+  horarios: ['9:00 – 12:00', '12:00 – 15:00', '15:00 – 18:00', '18:00 – 20:00'],
+
+  /* --- GOOGLE SHEETS ---
+     1. Sigue los pasos del archivo tqp-apps-script.gs
+     2. Una vez deployado el script, pega aquí la URL que te genera
+     3. Formato: 'https://script.google.com/macros/s/XXXXX/exec' */
+  sheets_url: ''  // ← Pega aquí tu URL de Apps Script
+};
+
+/* ============================================================
+   FIN DE CONFIGURACIÓN — No editar debajo de esta línea
+   ============================================================ */
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --v:#6b7a3e;--vd:#3e4a22;--vl:#8fa05a;--vs:#c8d4a0;
+  --cr:#f6f1ea;--crd:#ede8e0;--br:#4a3c2e;--brl:#8a7d6e;
+  --wh:#fdfcf8;--bdr:#ddd7cc;
+}
+html{font-size:16px}
+body{font-family:'Jost',sans-serif;background:var(--cr);color:var(--br);-webkit-text-size-adjust:100%;min-height:100vh}
+.app{max-width:780px;margin:0 auto;background:var(--wh);min-height:100vh}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:0.5px solid var(--bdr);background:var(--wh);position:sticky;top:0;z-index:200}
+.logo-wrap{height:52px;display:flex;align-items:center;justify-content:center}
+.logo-wrap img{height:100%;width:auto;object-fit:contain}
+.logo-txt{font-family:'Jost',sans-serif;font-weight:300;font-size:13px;letter-spacing:5px;color:var(--v);line-height:1.25;text-align:center}
+.cart-btn{background:none;border:0.5px solid var(--bdr);border-radius:2px;padding:10px 16px;cursor:pointer;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:1.5px;color:var(--br);text-transform:uppercase;display:flex;align-items:center;gap:8px;transition:all .2s;min-height:44px}
+.cart-btn:hover{border-color:var(--v);color:var(--v)}
+.cart-badge{background:var(--v);color:white;border-radius:50%;width:22px;height:22px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+
+.nav-tabs{display:flex;border-bottom:0.5px solid var(--bdr);background:var(--wh);position:sticky;top:81px;z-index:199;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.ntab{flex:1;min-width:100px;padding:14px 8px;text-align:center;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;color:var(--brl);transition:all .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.ntab.on{border-bottom-color:var(--v);color:var(--v);font-weight:500}
+
+.scr{display:none;padding:24px 20px 60px}.scr.on{display:block}
+.sh{margin-bottom:20px}
+.sh-sup{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brl);margin-bottom:4px}
+.sh-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;color:var(--vd);font-weight:300}
+
+.event-banner{background:#f0f4e8;border-left:3px solid var(--v);border-radius:0 3px 3px 0;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.event-banner-icon{font-size:16px;flex-shrink:0}
+.event-banner-txt strong{font-size:12px;color:var(--vd);display:block;margin-bottom:1px}
+.event-banner-txt span{font-size:11px;color:var(--brl)}
+
+.combo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.ccard{border:0.5px solid var(--bdr);border-radius:3px;overflow:hidden;background:white}
+.cimg-wrap{width:100%;aspect-ratio:4/3;background:var(--cr);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.cimg-wrap img{width:100%;height:100%;object-fit:cover}
+.cimg-wrap .emoji-fallback{font-size:56px}
+.cimg-wrap:active{opacity:.9}
+.zoom-hint{position:absolute;bottom:8px;right:10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.28);padding:4px 8px;border-radius:2px}
+.cbadge{position:absolute;top:10px;left:10px;color:white;font-size:9px;letter-spacing:1.5px;padding:4px 9px;text-transform:uppercase}
+.cinfo{padding:16px}
+.cname{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--vd);margin-bottom:6px}
+.citems{font-size:11px;color:var(--brl);line-height:1.85;margin-bottom:12px}
+.cprice-row{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.cprice{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--vd)}
+.cold{font-size:11px;color:var(--brl);text-decoration:line-through}
+.csave{font-size:10px;color:var(--v);letter-spacing:.5px}
+.add-btn{width:100%;padding:12px;background:transparent;border:0.5px solid var(--v);border-radius:2px;color:var(--v);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;min-height:46px}
+.add-btn:active,.add-btn:hover{background:var(--v);color:white}
+.add-btn.added{background:var(--v);color:white}
+
+.cat-section{margin-bottom:28px}
+.cat-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl);margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--bdr)}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.pcard{border:0.5px solid var(--bdr);border-radius:3px;overflow:hidden;background:white}
+.pimg-wrap{width:100%;aspect-ratio:1;background:var(--cr);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
+.pimg-wrap img{width:100%;height:100%;object-fit:cover}
+.pimg-wrap .emoji-fallback{font-size:42px}
+.pimg-wrap:active{opacity:.9}
+.pinfo{padding:11px}
+.pname{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--br);margin-bottom:3px}
+.pprice{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--vd)}
+.pdesc{font-size:10px;color:var(--brl);margin-top:2px;line-height:1.4}
+.padd{width:100%;margin-top:8px;padding:10px;background:transparent;border:0.5px solid var(--bdr);border-radius:2px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;color:var(--brl);transition:all .2s;min-height:44px}
+.padd:active,.padd:hover{border-color:var(--v);color:var(--v)}
+.padd.added{border-color:var(--v);color:var(--v);background:#f0f4e8}
+
+.cart-panel{display:none;padding:24px 20px 60px}.cart-panel.on{display:block}
+.cart-item{border:0.5px solid var(--bdr);border-radius:3px;padding:14px;margin-bottom:12px;background:white}
+.ci-top{display:flex;align-items:flex-start;gap:12px}
+.ci-icon{width:52px;height:52px;background:var(--cr);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden}
+.ci-icon img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--br);margin-bottom:2px}
+.ci-detail{font-size:11px;color:var(--brl);line-height:1.5}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.ci-price{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--vd)}
+.ci-remove{font-size:10px;color:var(--brl);cursor:pointer;letter-spacing:1px;text-transform:uppercase;background:none;border:none;font-family:'Jost',sans-serif;padding:4px 0;min-height:32px}
+.ci-remove:hover{color:var(--br)}
+.ci-msg-section{margin-top:12px;padding-top:12px;border-top:0.5px solid var(--bdr)}
+.ci-msg-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brl);margin-bottom:6px}
+.ci-msg-input{width:100%;border:0.5px solid var(--bdr);border-radius:2px;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--br);background:var(--wh);outline:none;transition:border-color .2s;resize:none;height:72px}
+.ci-msg-input:focus{border-color:var(--v)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:0.5px solid var(--bdr);margin-top:4px}
+.cart-total-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl)}
+.cart-total-val{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--vd)}
+
+.disc-box{background:#f0f4e8;border-radius:3px;padding:16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start}
+.disc-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.disc-txt strong{font-size:13px;color:var(--vd);display:block;margin-bottom:2px}
+.disc-txt span{font-size:12px;color:var(--brl)}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+.fg label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl)}
+.fg input,.fg select,.fg textarea{border:0.5px solid var(--bdr);border-radius:2px;padding:12px;font-family:'Jost',sans-serif;font-size:14px;color:var(--br);background:white;outline:none;transition:border-color .2s;min-height:46px;width:100%;-webkit-appearance:none;appearance:none}
+.fg input:focus,.fg select:focus{border-color:var(--v)}
+.fg textarea{height:72px;resize:none;min-height:auto}
+
+.district-wrap{position:relative}
+.district-dropdown{position:absolute;top:100%;left:0;right:0;background:white;border:0.5px solid var(--v);border-top:none;border-radius:0 0 3px 3px;max-height:200px;overflow-y:auto;z-index:300;display:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.district-dropdown.on{display:block}
+.district-opt{padding:10px 12px;font-size:13px;color:var(--br);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--bdr)}
+.district-opt:last-child{border-bottom:none}
+.district-opt:hover{background:var(--cr)}
+.district-opt-price{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--vd)}
+.delivery-selected{background:#f0f4e8;border-radius:3px;padding:10px 14px;margin-top:6px;display:none;font-size:12px;color:var(--vd);justify-content:space-between;align-items:center}
+.delivery-selected.on{display:flex}
+
+.order-summary{background:var(--cr);border-radius:3px;padding:16px;margin-bottom:20px}
+.os-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl);margin-bottom:12px}
+.os-item{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:0.5px solid var(--bdr);font-size:12px;gap:8px}
+.os-item:last-of-type{border:none}
+.os-item-left{flex:1;min-width:0}
+.os-item-name{color:var(--br)}
+.os-item-msg{font-size:10px;color:var(--brl);font-style:italic;margin-top:2px}
+.os-subtotal,.os-delivery,.os-discount{display:flex;justify-content:space-between;padding:6px 0;font-size:12px}
+.os-subtotal{border-top:0.5px solid var(--bdr);color:var(--brl)}
+.os-delivery{color:var(--brl)}
+.os-discount{color:var(--v)}
+.os-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr)}
+.os-total-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.os-total-val{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--vd)}
+
+.pay-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.popt{border:0.5px solid var(--bdr);border-radius:3px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.popt:hover{border-color:var(--vl)}
+.popt.on{border:2px solid var(--v);background:#f8faf3}
+.popt-icon{font-size:20px}
+.popt-name{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--br)}
+.pay-detail{background:var(--cr);border-radius:3px;padding:16px;text-align:center;margin-bottom:16px;font-size:12px;color:var(--brl);line-height:1.9}
+.qr-box{width:90px;height:90px;background:white;border:0.5px solid var(--bdr);border-radius:3px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--brl);text-align:center;line-height:1.4}
+
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.lightbox.on{display:flex}
+.lb-inner{position:relative;max-width:440px;width:100%;background:var(--wh);border-radius:4px;overflow:hidden}
+.lb-img{width:100%;aspect-ratio:1;background:var(--cr);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-img img{width:100%;height:100%;object-fit:cover}
+.lb-img .emoji-fallback{font-size:96px}
+.lb-info{padding:16px 20px}
+.lb-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--vd);margin-bottom:4px}
+.lb-desc{font-size:12px;color:var(--brl);line-height:1.6}
+.lb-close{position:absolute;top:12px;right:12px;width:38px;height:38px;background:rgba(0,0,0,.4);border-radius:50%;border:none;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+.success{text-align:center;padding:48px 20px}
+.sicon{font-size:52px;margin-bottom:16px}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:30px;font-style:italic;color:var(--vd);margin-bottom:8px}
+.ssub{font-size:12px;color:var(--brl);line-height:1.9;max-width:360px;margin:0 auto 24px}
+.coupon{background:var(--cr);border:1px dashed var(--vs);border-radius:3px;padding:18px 28px;display:inline-block;margin-bottom:20px}
+.coupon-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl);margin-bottom:6px}
+.coupon-code{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--vd);letter-spacing:4px}
+.coupon-note{font-size:10px;color:var(--brl);margin-top:4px}
+
+.btn{padding:13px 28px;border-radius:2px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;border:none;min-height:46px}
+.btn-p{background:var(--v);color:white}.btn-p:active,.btn-p:hover{background:var(--vd)}
+.btn-s{background:transparent;color:var(--v);border:0.5px solid var(--v)}.btn-s:active,.btn-s:hover{background:#f0f4e8}
+.btn-full{width:100%;display:block}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:0.5px solid var(--bdr);gap:12px}
+.chk-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
+.chk-row input{margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:var(--v)}
+.chk-row label{font-size:12px;color:var(--brl);line-height:1.6;cursor:pointer}
+.reg-ok{display:none;margin-top:16px;background:#f0f4e8;border-radius:3px;padding:14px;text-align:center}
+.reg-ok strong{font-size:13px;color:var(--vd);display:block;margin-bottom:3px}
+.reg-ok span{font-size:11px;color:var(--brl)}
+</style>
+</head>
+<body>
+
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <div class="lb-img" id="lb-img-wrap"></div>
+    <div class="lb-info"><div class="lb-name" id="lb-name"></div><div class="lb-desc" id="lb-desc"></div></div>
+  </div>
+</div>
+
+<div class="app">
+
+<div class="hdr">
+  <div style="width:56px"></div>
+  <div class="logo-wrap" id="logo-wrap"></div>
+  <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-badge" id="cart-badge">0</span></button>
+</div>
+
+<div class="nav-tabs" id="main-nav">
+  <div class="ntab on" id="nt-combos" onclick="showMain('combos')">Combos</div>
+  <div class="ntab" id="nt-catalogo" onclick="showMain('catalogo')">Catálogo</div>
+  <div class="ntab" id="nt-registrarse" onclick="showMain('registrarse')">Registrarse</div>
+</div>
+
+<div class="scr on" id="scr-combos">
+  <div class="sh"><div class="sh-sup">Combos regalo</div><div class="sh-title">Un regalo con intención</div></div>
+  <div class="event-banner"><div class="event-banner-icon">🌿</div><div class="event-banner-txt"><strong>Precios especiales de evento</strong><span>Ofertas exclusivas disponibles solo durante la feria de hoy.</span></div></div>
+  <div class="combo-grid" id="combos-grid"></div>
+</div>
+
+<div class="scr" id="scr-catalogo">
+  <div class="sh"><div class="sh-sup">Catálogo</div><div class="sh-title">Nuestras piezas</div></div>
+  <div class="event-banner"><div class="event-banner-icon">🌿</div><div class="event-banner-txt"><strong>Precios especiales de evento</strong><span>Ofertas exclusivas disponibles solo durante la feria de hoy.</span></div></div>
+  <div id="catalogo-wrap"></div>
+</div>
+
+<div class="scr" id="scr-registrarse">
+  <div class="sh"><div class="sh-sup">Comunidad TQP</div><div class="sh-title">Únete y obtén tu descuento</div></div>
+  <div class="disc-box"><div class="disc-icon">🎁</div><div class="disc-txt"><strong id="reg-disc-label">10% de descuento en tu compra de hoy</strong><span>Solo por registrarte con tu nombre y WhatsApp</span></div></div>
+  <div class="form-grid">
+    <div class="fg"><label>Nombre *</label><input type="text" id="reg-nombre" placeholder="Tu nombre" autocomplete="given-name"></div>
+    <div class="fg"><label>WhatsApp *</label><input type="tel" id="reg-wa" placeholder="+51 999 999 999" autocomplete="tel"></div>
+    <div class="fg full"><label>Email</label><input type="email" id="reg-email" placeholder="tu@email.com" autocomplete="email"></div>
+  </div>
+  <div class="chk-row"><input type="checkbox" id="reg-consent"><label for="reg-consent">Acepto recibir novedades y ofertas de Te Quiero Plantas por WhatsApp</label></div>
+  <button class="btn btn-p btn-full" onclick="doRegister()">Registrarme y activar descuento</button>
+  <div class="reg-ok" id="reg-ok"><strong>✓ ¡Ya eres parte de la comunidad TQP!</strong><span>Tu descuento se aplicará al pagar</span></div>
+</div>
+
+<div class="cart-panel" id="cart-panel">
+  <div class="sh"><div class="sh-sup">Tu selección</div><div class="sh-title">Carrito</div></div>
+  <div id="cart-body"></div>
+  <div id="cart-checkout-bar" style="display:none">
+    <div id="cart-totals"></div>
+    <button class="btn btn-p btn-full" onclick="goCheckout()">Continuar al pago →</button>
+    <div style="text-align:center;margin-top:12px"><button class="btn btn-s" style="font-size:9px" onclick="backToShop()">← Seguir comprando</button></div>
+  </div>
+</div>
+
+<div class="scr" id="scr-checkout" style="display:none">
+  <div class="sh"><div class="sh-sup">Casi listo</div><div class="sh-title">Completa tu pedido</div></div>
+  <div id="co-disc-box" style="display:none" class="disc-box"><div class="disc-icon">🏷️</div><div class="disc-txt"><strong>Descuento aplicado</strong><span id="co-disc-detail">—</span></div></div>
+  <div class="form-grid">
+    <div class="fg"><label>Nombre completo *</label><input type="text" id="co-nombre" placeholder="Tu nombre" autocomplete="name"></div>
+    <div class="fg"><label>WhatsApp *</label><input type="tel" id="co-wa" placeholder="+51 999 999 999" autocomplete="tel" oninput="updateCoupon()"></div>
+    <div class="fg full"><label>Email *</label><input type="email" id="co-email" placeholder="tu@email.com" autocomplete="email"></div>
+    <div class="fg full"><label>Dirección de entrega *</label><input type="text" id="co-dir" placeholder="Calle y número" autocomplete="street-address"></div>
+    <div class="fg full">
+      <label>Distrito *</label>
+      <div class="district-wrap">
+        <input type="text" id="co-distrito" placeholder="Escribe tu distrito..." autocomplete="off" oninput="filterDistricts()" onfocus="filterDistricts()" onblur="setTimeout(hideDistricts,200)">
+        <div class="district-dropdown" id="district-dropdown"></div>
+      </div>
+      <div class="delivery-selected" id="delivery-selected">
+        <span id="delivery-district-name">—</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--vd)" id="delivery-cost-display">—</span>
+      </div>
+    </div>
+    <div class="fg"><label>Fecha de entrega *</label><input type="date" id="co-fecha"></div>
+    <div class="fg"><label>Hora preferida</label><select id="co-hora"><option value="">Selecciona un rango</option></select></div>
+    <div class="fg full"><label>¿Para quién es el regalo?</label><input type="text" id="co-destinatario" placeholder="Nombre del destinatario (opcional)"></div>
+  </div>
+  <div class="order-summary">
+    <div class="os-title">Resumen de pedido</div>
+    <div id="co-items"></div>
+    <div class="os-subtotal"><span>Subtotal productos</span><span id="co-subtotal">—</span></div>
+    <div class="os-delivery"><span id="co-delivery-label">Delivery</span><span id="co-delivery-val">—</span></div>
+    <div class="os-discount" id="co-disc-row" style="display:none"><span id="co-disc-label">Descuento</span><span id="co-disc-val">—</span></div>
+    <div class="os-total"><span class="os-total-lbl">Total</span><span class="os-total-val" id="co-total-val">—</span></div>
+  </div>
+  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--brl);margin-bottom:12px">Método de pago</div>
+  <div class="pay-opts">
+    <div class="popt on" id="po-yape" onclick="selPay('yape')"><div class="popt-icon">💚</div><div class="popt-name">Yape</div></div>
+    <div class="popt" id="po-izipay" onclick="selPay('izipay')"><div class="popt-icon">💳</div><div class="popt-name">Izipay</div></div>
+    <div class="popt" id="po-transfer" onclick="selPay('transfer')"><div class="popt-icon">🏦</div><div class="popt-name">Transferencia</div></div>
+  </div>
+  <div class="pay-detail" id="pay-det"></div>
+  <div class="chk-row"><input type="checkbox" id="co-consent"><label for="co-consent">Acepto recibir novedades y ofertas de Te Quiero Plantas por WhatsApp</label></div>
+  <div class="nav-row">
+    <button class="btn btn-s" onclick="backToCart()">← Volver</button>
+    <button class="btn btn-p" onclick="confirmOrder()">Confirmar pedido ✓</button>
+  </div>
+</div>
+
+<div class="scr" id="scr-success" style="display:none">
+  <div class="success">
+    <div class="sicon">🌿</div>
+    <div class="stitle">¡Pedido confirmado!</div>
+    <p class="ssub">Te contactaremos por WhatsApp para coordinar la entrega. ¡Gracias por elegir un regalo con intención!</p>
+    <div class="coupon">
+      <div class="coupon-lbl">Tu cupón para la próxima compra</div>
+      <div class="coupon-code" id="coupon-code">TQP——</div>
+      <div class="coupon-note" id="coupon-note">— % de descuento · válido 30 días</div>
+    </div>
+    <p style="font-size:11px;color:var(--brl);margin-bottom:24px">Etiquétanos en tu story<br><strong style="color:var(--v)" id="success-ig">@tequieroquieplantas</strong> para activar tu cupón</p>
+    <button class="btn btn-p" onclick="resetAll()">Ver más productos</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ============================================================
+   INICIALIZACIÓN — Renderiza la UI desde TQP_CONFIG
+   ============================================================ */
+
+var cart = [];
+var registered = false;
+var selectedDeliveryCost = 0;
+var selectedDistrictName = '';
+
+function imgOrEmoji(foto, emoji, cssClass) {
+  if (foto) return '<img src="' + foto + '" alt="" onerror="this.parentNode.innerHTML=\'<span class=emoji-fallback>' + emoji + '</span>\'">';
+  return '<span class="emoji-fallback">' + emoji + '</span>';
+}
+
+function initLogo() {
+  var wrap = document.getElementById('logo-wrap');
+  if (TQP_CONFIG.logo_archivo) {
+    wrap.innerHTML = '<img src="' + TQP_CONFIG.logo_archivo + '" alt="Te Quiero Plantas" style="height:' + TQP_CONFIG.logo_alto_px + 'px;width:auto" onerror="this.parentNode.innerHTML=logoFallback()">';
+  } else {
+    wrap.innerHTML = logoFallback();
+  }
+}
+
+function logoFallback() {
+  return '<div class="logo-txt">TE<br>QUIERO<br>PLANTAS</div>';
+}
+
+function initCombos() {
+  var grid = document.getElementById('combos-grid');
+  var html = '';
+  TQP_CONFIG.combos.forEach(function(c) {
+    var ahorro = c.precio_original - c.precio;
+    var badge = c.badge ? '<span class="cbadge" style="background:' + c.badge_color + '">' + c.badge + '</span>' : '';
+    var items = c.descripcion.map(function(d){ return '· ' + d; }).join('<br>');
+    html += '<div class="ccard">';
+    html += '<div class="cimg-wrap" onclick="openLB(\'' + (c.foto||'') + '\',\'' + c.emoji + '\',\'' + c.nombre + '\',\'' + c.foto_detalle + '\')">' + badge + imgOrEmoji(c.foto, c.emoji, 'combo') + '<span class="zoom-hint">Ver foto</span></div>';
+    html += '<div class="cinfo"><div class="cname">' + c.nombre + '</div><div class="citems">' + items + '</div>';
+    html += '<div class="cprice-row"><span class="cprice">S/ ' + c.precio + '</span><span class="cold">S/ ' + c.precio_original + '</span><span class="csave">Ahorras S/ ' + ahorro + '</span></div>';
+    html += '<button class="add-btn" onclick="addItem(\'' + c.nombre + '\',\'' + c.emoji + '\',' + c.precio + ',\'Combo regalo\',this)">+ Agregar al carrito</button>';
+    html += '</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function initCatalogo() {
+  var wrap = document.getElementById('catalogo-wrap');
+  var categorias = {};
+  TQP_CONFIG.catalogo.forEach(function(p) {
+    if (!categorias[p.categoria]) categorias[p.categoria] = [];
+    categorias[p.categoria].push(p);
+  });
+  var labels = { maceta: 'Macetas', planta: 'Plantas' };
+  var html = '';
+  Object.keys(categorias).forEach(function(cat) {
+    html += '<div class="cat-section"><div class="cat-label">' + (labels[cat] || cat) + '</div><div class="cat-grid">';
+    categorias[cat].forEach(function(p) {
+      html += '<div class="pcard"><div class="pimg-wrap" onclick="openLB(\'' + (p.foto||'') + '\',\'' + p.emoji + '\',\'' + p.nombre + '\',\'' + p.foto_detalle + '\')">' + imgOrEmoji(p.foto, p.emoji, 'prod') + '<span class="zoom-hint">Ver foto</span></div>';
+      html += '<div class="pinfo"><div class="pname">' + p.nombre + '</div><div class="pprice">S/ ' + p.precio + '</div><div class="pdesc">' + p.descripcion + '</div>';
+      html += '<button class="padd" onclick="addItem(\'' + p.nombre + '\',\'' + p.emoji + '\',' + p.precio + ',\'' + (labels[cat]||cat).slice(0,-1) + '\',this)">+ Agregar</button>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  });
+  wrap.innerHTML = html;
+}
+
+function initHorarios() {
+  var sel = document.getElementById('co-hora');
+  TQP_CONFIG.horarios.forEach(function(h) {
+    var opt = document.createElement('option');
+    opt.value = h; opt.textContent = h;
+    sel.appendChild(opt);
+  });
+}
+
+function initTexts() {
+  document.getElementById('reg-disc-label').textContent = TQP_CONFIG.descuento_registro_pct + '% de descuento en tu compra de hoy';
+  document.getElementById('success-ig').textContent = TQP_CONFIG.instagram;
+  document.getElementById('coupon-note').textContent = TQP_CONFIG.cupon_descuento_pct + '% de descuento · válido ' + TQP_CONFIG.cupon_vigencia_dias + ' días';
+  selPay('yape');
+}
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+
+function showMain(sec) {
+  ['combos','catalogo','registrarse'].forEach(function(s) {
+    var el = document.getElementById('scr-' + s);
+    var nt = document.getElementById('nt-' + s);
+    if (el) el.className = 'scr' + (s === sec ? ' on' : '');
+    if (nt) nt.className = 'ntab' + (s === sec ? ' on' : '');
+  });
+  document.getElementById('cart-panel').className = 'cart-panel';
+  document.getElementById('scr-checkout').style.display = 'none';
+  document.getElementById('scr-success').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function openCart() {
+  ['combos','catalogo','registrarse'].forEach(function(s) {
+    var el = document.getElementById('scr-' + s);
+    var nt = document.getElementById('nt-' + s);
+    if (el) el.className = 'scr';
+    if (nt) nt.className = 'ntab';
+  });
+  document.getElementById('cart-panel').className = 'cart-panel on';
+  document.getElementById('scr-checkout').style.display = 'none';
+  document.getElementById('scr-success').style.display = 'none';
+  renderCart();
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   CARRITO
+   ============================================================ */
+
+function renderCart() {
+  var body = document.getElementById('cart-body');
+  var bar = document.getElementById('cart-checkout-bar');
+  if (!cart.length) {
+    body.innerHTML = '<div style="text-align:center;padding:64px 20px;color:var(--brl)"><div style="font-size:44px;margin-bottom:12px">🛒</div><div style="font-size:12px;letter-spacing:1px">Tu carrito está vacío</div></div>';
+    bar.style.display = 'none'; return;
+  }
+  var subtotal = 0; var html = '';
+  cart.forEach(function(item, i) {
+    subtotal += item.price;
+    html += '<div class="cart-item"><div class="ci-top"><div class="ci-icon">' + (item.foto ? '<img src="' + item.foto + '" alt="">' : item.icon) + '</div>';
+    html += '<div class="ci-info"><div class="ci-name">' + item.name + '</div><div class="ci-detail">' + item.detail + '</div></div>';
+    html += '<div class="ci-right"><div class="ci-price">S/ ' + item.price + '</div><button class="ci-remove" onclick="removeItem(' + i + ')">Quitar</button></div></div>';
+    html += '<div class="ci-msg-section"><div class="ci-msg-label">✉ Mensaje de dedicatoria para este producto</div>';
+    html += '<textarea class="ci-msg-input" placeholder="Escribe un mensaje especial..." maxlength="200" onchange="cart[' + i + '].msg=this.value">' + (item.msg || '') + '</textarea></div></div>';
+  });
+  body.innerHTML = html;
+  var discount = registered ? Math.round(subtotal * TQP_CONFIG.descuento_registro_pct / 100) : 0;
+  var totHtml = '<div class="cart-total-row"><span class="cart-total-lbl">Subtotal</span><span style="font-family:\'Cormorant Garamond\',serif;font-size:26px;color:var(--vd)">S/ ' + subtotal + '</span></div>';
+  if (discount > 0) totHtml += '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--v);padding-bottom:8px"><span>Descuento ' + TQP_CONFIG.descuento_registro_pct + '%</span><span>- S/ ' + discount + '</span></div>';
+  document.getElementById('cart-totals').innerHTML = totHtml;
+  bar.style.display = 'block';
+}
+
+function updateBadge() { document.getElementById('cart-badge').textContent = cart.length; }
+function removeItem(i) { cart.splice(i, 1); updateBadge(); renderCart(); }
+
+function addItem(name, icon, price, detail, btn) {
+  var prod = TQP_CONFIG.combos.concat(TQP_CONFIG.catalogo).find(function(p){ return p.nombre === name; });
+  cart.push({ name: name, icon: icon, foto: prod ? (prod.foto || '') : '', price: price, detail: detail, msg: '' });
+  updateBadge();
+  var orig = btn.textContent;
+  btn.textContent = '✓ Agregado'; btn.classList.add('added');
+  setTimeout(function() { btn.textContent = orig; btn.classList.remove('added'); }, 1800);
+}
+
+/* ============================================================
+   DISTRITOS
+   ============================================================ */
+
+function filterDistricts() {
+  var val = document.getElementById('co-distrito').value.toLowerCase().trim();
+  var dd = document.getElementById('district-dropdown');
+  var matches = Object.keys(TQP_CONFIG.distritos).filter(function(d) { return d.toLowerCase().includes(val); });
+  if (!matches.length || !val) { dd.className = 'district-dropdown'; return; }
+  var html = '';
+  matches.forEach(function(d) {
+    html += '<div class="district-opt" onclick="selectDistrict(\'' + d + '\',' + TQP_CONFIG.distritos[d] + ')"><span>' + d + '</span><span class="district-opt-price">S/ ' + TQP_CONFIG.distritos[d] + '</span></div>';
+  });
+  dd.innerHTML = html; dd.className = 'district-dropdown on';
+}
+
+function selectDistrict(name, cost) {
+  document.getElementById('co-distrito').value = name;
+  document.getElementById('district-dropdown').className = 'district-dropdown';
+  selectedDeliveryCost = cost; selectedDistrictName = name;
+  document.getElementById('delivery-district-name').textContent = name;
+  document.getElementById('delivery-cost-display').textContent = 'S/ ' + cost;
+  document.getElementById('delivery-selected').className = 'delivery-selected on';
+  updateCheckoutTotals();
+}
+
+function hideDistricts() { document.getElementById('district-dropdown').className = 'district-dropdown'; }
+
+/* ============================================================
+   REGISTRO
+   ============================================================ */
+
+function doRegister() {
+  var nombre = document.getElementById('reg-nombre').value.trim();
+  var wa = document.getElementById('reg-wa').value.trim();
+  if (!nombre || !wa) { alert('Por favor completa nombre y WhatsApp.'); return; }
+  registered = true;
+  document.getElementById('reg-ok').style.display = 'block';
+  document.getElementById('co-nombre').value = nombre;
+  document.getElementById('co-wa').value = wa;
+  var em = document.getElementById('reg-email').value.trim();
+  if (em) document.getElementById('co-email').value = em;
+  updateCoupon();
+
+  // Enviar registro a Google Sheets
+  enviarASheets({
+    tipo: 'registro',
+    nombre: nombre,
+    whatsapp: wa,
+    email: em,
+    acepta_marketing: document.getElementById('reg-consent').checked
+  });
+}
+
+function updateCoupon() {
+  var wa = document.getElementById('co-wa').value.replace(/\D/g, '');
+  var suffix = wa.length >= 4 ? wa.slice(-4) : '——';
+  document.getElementById('coupon-code').textContent = TQP_CONFIG.cupon_prefijo + suffix;
+}
+
+/* ============================================================
+   CHECKOUT
+   ============================================================ */
+
+function goCheckout() {
+  if (!cart.length) { alert('Tu carrito está vacío.'); return; }
+  document.getElementById('cart-panel').className = 'cart-panel';
+  document.getElementById('scr-checkout').style.display = 'block';
+  var subtotal = cart.reduce(function(s, i) { return s + i.price; }, 0);
+  var itemsHtml = '';
+  cart.forEach(function(item) {
+    itemsHtml += '<div class="os-item"><div class="os-item-left"><div class="os-item-name">' + item.name + '</div>';
+    if (item.msg) itemsHtml += '<div class="os-item-msg">✉ "' + item.msg.substring(0, 60) + (item.msg.length > 60 ? '…' : '') + '"</div>';
+    itemsHtml += '</div><span>S/ ' + item.price + '</span></div>';
+  });
+  document.getElementById('co-items').innerHTML = itemsHtml;
+  var discount = registered ? Math.round(subtotal * TQP_CONFIG.descuento_registro_pct / 100) : 0;
+  if (discount > 0) {
+    document.getElementById('co-disc-box').style.display = 'flex';
+    document.getElementById('co-disc-detail').textContent = 'S/ ' + discount + ' descontados de tu compra';
+  }
+  var today = new Date(); today.setDate(today.getDate() + 1);
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  document.getElementById('co-fecha').value = today.getFullYear() + '-' + mm + '-' + dd;
+  if (registered) {
+    var n = document.getElementById('reg-nombre').value;
+    var w = document.getElementById('reg-wa').value;
+    var e = document.getElementById('reg-email').value;
+    if (n) document.getElementById('co-nombre').value = n;
+    if (w) document.getElementById('co-wa').value = w;
+    if (e) document.getElementById('co-email').value = e;
+  }
+  updateCoupon();
+  updateCheckoutTotals();
+  window.scrollTo(0, 0);
+}
+
+function updateCheckoutTotals() {
+  var subtotal = cart.reduce(function(s, i) { return s + i.price; }, 0);
+  var discount = registered ? Math.round(subtotal * TQP_CONFIG.descuento_registro_pct / 100) : 0;
+  var delivery = selectedDeliveryCost;
+  var total = subtotal + delivery - discount;
+  document.getElementById('co-subtotal').textContent = 'S/ ' + subtotal;
+  if (selectedDistrictName) {
+    document.getElementById('co-delivery-label').textContent = 'Delivery (' + selectedDistrictName + ')';
+    document.getElementById('co-delivery-val').textContent = 'S/ ' + delivery;
+  } else {
+    document.getElementById('co-delivery-label').textContent = 'Delivery';
+    document.getElementById('co-delivery-val').textContent = 'Selecciona distrito';
+  }
+  if (discount > 0) {
+    document.getElementById('co-disc-row').style.display = 'flex';
+    document.getElementById('co-disc-label').textContent = 'Descuento ' + TQP_CONFIG.descuento_registro_pct + '%';
+    document.getElementById('co-disc-val').textContent = '- S/ ' + discount;
+  }
+  document.getElementById('co-total-val').textContent = 'S/ ' + total;
+}
+
+function backToCart() { document.getElementById('scr-checkout').style.display = 'none'; openCart(); }
+function backToShop() { showMain('combos'); }
+
+function selPay(method) {
+  ['yape','izipay','transfer'].forEach(function(m) { document.getElementById('po-' + m).className = 'popt' + (m === method ? ' on' : ''); });
+  var wa = TQP_CONFIG.whatsapp;
+  var details = {
+    yape: '<div class="qr-box">QR<br>Yape</div>Escanea con Yape o envía al <strong>+' + wa + '</strong><br>Manda el comprobante por WhatsApp y confirmamos en minutos 🌿',
+    izipay: 'Te enviaremos un <strong>link de pago Izipay</strong> por WhatsApp.<br>Acepta tarjetas Visa y Mastercard.<br><br>Recibirás el link en los próximos minutos.',
+    transfer: 'BCP · Cta. corriente<br><strong>' + TQP_CONFIG.bcp_cuenta + '</strong><br><br>Envía el comprobante por WhatsApp al<br>+' + wa
+  };
+  document.getElementById('pay-det').innerHTML = details[method];
+}
+
+function confirmOrder() {
+  var nombre = document.getElementById('co-nombre').value.trim();
+  var wa = document.getElementById('co-wa').value.trim();
+  var dir = document.getElementById('co-dir').value.trim();
+  var distrito = document.getElementById('co-distrito').value.trim();
+  if (!nombre || !wa || !dir || !distrito) { alert('Por favor completa nombre, WhatsApp, dirección y distrito.'); return; }
+  updateCoupon();
+
+  // Armar payload de venta
+  var subtotal = cart.reduce(function(s, i) { return s + i.price; }, 0);
+  var discount = registered ? Math.round(subtotal * TQP_CONFIG.descuento_registro_pct / 100) : 0;
+  var total = subtotal + selectedDeliveryCost - discount;
+  var metodo = ['yape','izipay','transfer'].find(function(m) {
+    return document.getElementById('po-' + m).classList.contains('on');
+  }) || 'yape';
+
+  enviarASheets({
+    tipo: 'venta',
+    nombre: nombre,
+    whatsapp: wa,
+    email: document.getElementById('co-email').value.trim(),
+    acepta_marketing: document.getElementById('co-consent').checked,
+    destinatario: document.getElementById('co-destinatario').value.trim(),
+    direccion: dir,
+    distrito: distrito,
+    delivery: selectedDeliveryCost,
+    metodo_pago: metodo,
+    total: total,
+    hora_preferida: document.getElementById('co-hora').value,
+    fecha_entrega: document.getElementById('co-fecha').value,
+    cupon: document.getElementById('coupon-code').textContent,
+    productos: cart.map(function(item) {
+      return { nombre: item.name, precio: item.price, mensaje: item.msg || '' };
+    })
+  });
+
+  document.getElementById('scr-checkout').style.display = 'none';
+  document.getElementById('scr-success').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+// ------------------------------------------------------------
+// Envío a Google Sheets (fire & forget — no bloquea la UI)
+// ------------------------------------------------------------
+function enviarASheets(payload) {
+  if (!TQP_CONFIG.sheets_url) return; // Si no hay URL configurada, no hace nada
+  fetch(TQP_CONFIG.sheets_url, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(function() {}); // Silencia errores de red — no afecta la experiencia del cliente
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+
+function openLB(foto, emoji, name, desc) {
+  var wrap = document.getElementById('lb-img-wrap');
+  wrap.innerHTML = foto ? '<img src="' + foto + '" alt="' + name + '" onerror="this.parentNode.innerHTML=\'<span class=emoji-fallback>' + emoji + '</span>\'">' : '<span class="emoji-fallback">' + emoji + '</span>';
+  document.getElementById('lb-name').textContent = name;
+  document.getElementById('lb-desc').textContent = desc;
+  document.getElementById('lightbox').className = 'lightbox on';
+}
+function closeLightbox() { document.getElementById('lightbox').className = 'lightbox'; }
+function closeLB(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+function resetAll() {
+  cart = []; registered = false; selectedDeliveryCost = 0; selectedDistrictName = '';
+  updateBadge();
+  document.getElementById('scr-success').style.display = 'none';
+  document.getElementById('reg-ok').style.display = 'none';
+  document.getElementById('co-disc-box').style.display = 'none';
+  document.getElementById('co-disc-row').style.display = 'none';
+  document.getElementById('delivery-selected').className = 'delivery-selected';
+  ['reg-nombre','reg-wa','reg-email','co-nombre','co-wa','co-email','co-dir','co-distrito'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  showMain('combos');
+}
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function() {
+  initLogo();
+  initCombos();
+  initCatalogo();
+  initHorarios();
+  initTexts();
+});
+</script>
+</body>
+</html>
